@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -16,8 +17,9 @@ var rootCmd = &cobra.Command{
 	// },
 }
 
-func check(e error) {
+func check(e error, msg string) {
 	if e != nil {
+		log.Println(msg)
 		panic(e)
 	}
 }

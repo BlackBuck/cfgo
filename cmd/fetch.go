@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 
 	"github.com/gocolly/colly"
 	"github.com/spf13/cobra"
@@ -15,16 +14,14 @@ var fetchCmd = &cobra.Command{
 	Short: "Fetch the input and output for given contest and problem.",
 	Long:  "Fetch the input and output for given contest and problem.",
 	Run: func(cmd *cobra.Command, args []string) {
-		contestIDStr, _ := cmd.Flags().GetString("contest")
-		contestID, err := strconv.Atoi(contestIDStr)
-		check(err)
+		contestID, _ := cmd.Flags().GetString("contest")
 		problem, _ := cmd.Flags().GetString("problem")
 
 		fetchProblemIO(contestID, problem)
 	},
 }
 
-func fetchProblemIO(contestID int, problem string) {
+func fetchProblemIO(contestID string, problem string) {
 	c := colly.NewCollector()
 
 	c.OnRequest(func(r *colly.Request) {
@@ -34,11 +31,11 @@ func fetchProblemIO(contestID int, problem string) {
 	c.OnHTML("div.sample-test", func(e *colly.HTMLElement) {
 
 		i, err := os.Create("cfin.txt")
-		check(err)
+		check(err, "Error occured while opening file 'cfin.txt'")
 		defer i.Close()
 
 		o, err := os.Create("cfout.txt")
-		check(err)
+		check(err, "Error occured while opening file 'cfout.txt'")
 		defer o.Close()
 
 		// input
@@ -56,5 +53,5 @@ func fetchProblemIO(contestID int, problem string) {
 		log.Println("Something went wrong: ", err)
 	})
 
-	c.Visit(fmt.Sprintf("https://codeforces.com/contest/%d/problem/%s", contestID, problem))
+	c.Visit(fmt.Sprintf("https://codeforces.com/contest/%s/problem/%s", contestID, problem))
 }
