@@ -2,11 +2,11 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/gocolly/colly"
 	"github.com/spf13/cobra"
+	"github.com/charmbracelet/log"
 )
 
 var fetchCmd = &cobra.Command{
@@ -50,7 +50,7 @@ func fetchProblemIO(contestID string, problem string) {
 	})
 
 	c.OnError(func(_ *colly.Response, err error) {
-		log.Println("Something went wrong: ", err)
+		log.Error("Something went wrong: ", err)
 	})
 
 	c.Visit(fmt.Sprintf("https://codeforces.com/contest/%s/problem/%s", contestID, problem))

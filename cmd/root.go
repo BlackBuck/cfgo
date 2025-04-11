@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"os"
 
+	"github.com/charmbracelet/log"
 	"github.com/spf13/cobra"
 )
 
@@ -19,7 +19,7 @@ var rootCmd = &cobra.Command{
 
 func check(e error, msg string) {
 	if e != nil {
-		log.Println(msg)
+		log.Error(msg)
 		panic(e)
 	}
 }
@@ -33,7 +33,7 @@ func Execute() {
 
 func init() {
 	rootCmd.AddCommand(fetchCmd)
-
+	rootCmd.AddCommand(listCmd)
 	fetchCmd.PersistentFlags().String("contest", "", "Contest ID.")
 	fetchCmd.PersistentFlags().String("problem", "A", "Problem ID. Default: A")
 }
